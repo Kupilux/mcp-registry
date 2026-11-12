@@ -1,0 +1,22 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.Kupilux/app-reviews-intelligence",
+  "title": "App Reviews Intelligence",
+  "description": "App Store & Google Play reviews with AI themes, bugs, and competitor reports.",
+  "version": "1.0.0",
+  "websiteUrl": "https://apify.com/kupilux/app-reviews-intelligence",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://mcp.apify.com?tools=kupilux/app-reviews-intelligence",
+      "headers": [
+        {
+          "name": "Authorization",
+          "description": "Apify API token as Bearer token, e.g. Bearer <APIFY_TOKEN>. Prefer OAuth in clients that support it.",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}
