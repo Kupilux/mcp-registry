@@ -1,0 +1,49 @@
+name: Remove from MCP Registry
+
+on:
+  workflow_dispatch:
+    inputs:
+      status:
+        description: Nuovo stato nel registro
+        required: true
+        default: deprecated
+        type: choice
+        options:
+          - deprecated
+          - deleted
+      confirm:
+        description: Digita il nome del server per confermare
+        required: true
+        type: string
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  remove:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Conferma nome server
+        run: |
+          if [ "${{ inputs.confirm }}" != "io.github.Kupilux/app-reviews-intelligence" ]; then
+            echo "::error::Il campo confirm deve essere esattamente: io.github.Kupilux/app-reviews-intelligence"
+            exit 1
+          fi
+
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Install mcp-publisher
+        run: |
+          curl -L "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_$(uname -s | tr '[:upper:]' '[:lower:]')_$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/').tar.gz" | tar xz mcp-publisher
+
+      - name: Authenticate to MCP Registry
+        run: ./mcp-publisher login github-oidc
+
+      - name: Update server status in MCP Registry
+        run: ./mcp-publisher status --status ${{ inputs.status }} --all-versions io.github.Kupilux/app-reviews-intelligence
